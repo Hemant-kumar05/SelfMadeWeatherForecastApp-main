@@ -1,0 +1,25 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Node (in case you use it later)
+node_modules/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# JetBrains IDEs
+.idea/
+
+# Env files (often contain secrets)
+.env
+.env.*
+
+# Logs
+*.log

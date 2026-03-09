@@ -1,0 +1,14 @@
+# Normalize line endings and keep LF in the repository
+* text=auto eol=lf
+
+*.html text
+*.css  text
+*.js   text
+*.md   text
+
+# Images/binaries
+*.png  binary
+*.ico  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
