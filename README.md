@@ -57,12 +57,13 @@ Because this is a static site, the best way to run it is with a small local web 
 
 You can host this as a static site using GitHub Pages.
 
+This repo includes a GitHub Actions workflow that deploys the site automatically.
+
 1. Push the repository to GitHub.
-2. In GitHub repo settings: **Settings → Pages**
-3. Select:
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/ (root)`
+2. In your GitHub repo: **Settings → Pages**
+3. Under **Build and deployment**, set:
+   - Source: **GitHub Actions**
+4. Go to the **Actions** tab and wait for the workflow **Deploy to GitHub Pages** to finish.
 
 After that, GitHub will provide the public URL.
 
