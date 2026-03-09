@@ -6,27 +6,37 @@ let windMeasure = document.querySelector('.windInfo');
 let humidMeasure = document.querySelector('.humidityInfo');
 let weatherInfo = document.querySelector('.weatherImg')
 
-// Don't commit secrets to GitHub.
-// For local use you can set a key here, otherwise the app will prompt once and store it in the browser.
-const OPENWEATHER_API_KEY = '';
+const OPENWEATHER_API_KEY = 'YOUR_OPENWEATHER_API_KEY_HERE';
+const OPENWEATHER_API_KEY_STORAGE_KEY = 'openweather_api_key';
+
+let apiKeyPromptShown = false;
 
 function getApiKey() {
-    if (OPENWEATHER_API_KEY) return OPENWEATHER_API_KEY;
-
-    let storedKey = localStorage.getItem('OPENWEATHER_API_KEY');
-    if (storedKey) return storedKey;
-
-    let enteredKey = prompt('Enter your OpenWeather API key (it will be saved in this browser):');
-    if (enteredKey) {
-        enteredKey = enteredKey.trim();
-        if (enteredKey) {
-            localStorage.setItem('OPENWEATHER_API_KEY', enteredKey);
-            return enteredKey;
-        }
+    const storedKey = localStorage.getItem(OPENWEATHER_API_KEY_STORAGE_KEY);
+    if (storedKey && storedKey.trim().length > 0) {
+        return storedKey.trim();
     }
 
-    alert('OpenWeather API key is required. Please refresh and enter your key.');
-    return '';
+    if (OPENWEATHER_API_KEY && OPENWEATHER_API_KEY !== 'YOUR_OPENWEATHER_API_KEY_HERE') {
+        return OPENWEATHER_API_KEY;
+    }
+
+    if (!apiKeyPromptShown) {
+        apiKeyPromptShown = true;
+        const entered = prompt('Enter your OpenWeather API key (it will be saved in this browser):');
+        if (entered && entered.trim().length > 0) {
+            const trimmed = entered.trim();
+            localStorage.setItem(OPENWEATHER_API_KEY_STORAGE_KEY, trimmed);
+            return trimmed;
+        }
+        alert('OpenWeather API key is required to use this app.');
+    }
+
+    return null;
+}
+
+function getResponseCode(data) {
+    return Number(data?.cod);
 }
 
 btn.addEventListener('click', getInfo);
@@ -40,7 +50,9 @@ document.addEventListener('keydown', (event) => {
 async function getInfo() {
 
     const apiKey = getApiKey();
-    if (!apiKey) return;
+    if (!apiKey) {
+        return;
+    }
 
     if (input.value.length > 0) {
 
@@ -51,9 +63,13 @@ async function getInfo() {
             let res = await fetch(url)
             let data = await res.json();
 
-            if (data.cod == 404) {
+            const code = getResponseCode(data);
+
+            if (code === 401 || code === 403) {
+                alert(`Invalid API key: ${data?.message ?? 'Unauthorized'}`);
+            } else if (code === 404) {
                 alert('Invalid City Name');
-            } else if (data.cod > 199 && data.cod < 300) {
+            } else if (code > 199 && code < 300) {
 
                 temp.innerHTML = `${Math.round(data.main.temp)}°C`;
                 cityName.innerHTML = data.name;
@@ -62,14 +78,16 @@ async function getInfo() {
                 weatherInfo.setAttribute(`src`, `./assets/${data.weather[0].main.toLowerCase()}.png`);
                 weatherInfo.setAttribute(`alt`, `${data.weather[0].main}`);
 
-            } else if (data.cod > 399 && data.cod < 500) {
+            } else if (code > 399 && code < 500) {
 
                 alert('Error from user side.');
 
-            } else if (data.cod > 499 && data.cod < 600) {
+            } else if (code > 499 && code < 600) {
 
                 alert('Error from Server side.');
 
+            } else {
+                alert('Unexpected response from weather service.');
             }
                     
     } else {
@@ -79,7 +97,9 @@ async function getInfo() {
 
 onload = async () => {
     const apiKey = getApiKey();
-    if (!apiKey) return;
+    if (!apiKey) {
+        return;
+    }
 
     let city = 'new delhi';
     input.value = '';
@@ -88,9 +108,13 @@ onload = async () => {
     let res = await fetch(url)
     let data = await res.json();
 
-    if (data.cod == 404) {
+    const code = getResponseCode(data);
+
+    if (code === 401 || code === 403) {
+        alert(`Invalid API key: ${data?.message ?? 'Unauthorized'}`);
+    } else if (code === 404) {
         alert('Invalid City Name');
-    } else if (data.cod > 199 && data.cod < 300) {
+    } else if (code > 199 && code < 300) {
 
         temp.innerHTML = `${Math.round(data.main.temp)}°C`;
         cityName.innerHTML = data.name;
@@ -99,13 +123,15 @@ onload = async () => {
         weatherInfo.setAttribute(`src`, `./assets/${data.weather[0].main.toLowerCase()}.png`);
         weatherInfo.setAttribute(`alt`, `${data.weather[0].main.toLowerCase()}`);
 
-    } else if (data.cod > 399 && data.cod < 500) {
+    } else if (code > 399 && code < 500) {
 
         alert('Error from user side.');
 
-    } else if (data.cod > 499 && data.cod < 600) {
+    } else if (code > 499 && code < 600) {
 
         alert('Error from Server side.');
 
+    } else {
+        alert('Unexpected response from weather service.');
     }
 }

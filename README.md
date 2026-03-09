@@ -24,22 +24,16 @@ A lightweight weather app that fetches **current weather by city name** using th
 This project calls OpenWeather directly from the browser, so you must provide an API key.
 
 1. Create a free API key: https://openweathermap.org/api
+2. Run the app.
+3. On first load, the app will prompt you to paste your API key and will save it in your browser (localStorage).
 
-### Recommended (works for GitHub Pages)
+Optional (manual): You can also hard-code your key in `sketch.js` by replacing:
 
-When you open the app, it will prompt you to enter your API key once and then save it in your browser (localStorage).
+```js
+const OPENWEATHER_API_KEY = 'YOUR_OPENWEATHER_API_KEY_HERE';
+```
 
-### Optional (local only)
-
-If you want to hard-code the key for your own local use, you can set it in `sketch.js`.
-Do NOT commit/push the key to GitHub (GitHub blocks API keys via Push Protection and the key will be public in a static website).
-
-2. Open `sketch.js`
-3. Set:
-
-   ```js
-   const OPENWEATHER_API_KEY = 'YOUR_OPENWEATHER_API_KEY_HERE';
-   ```
+Note: Hard-coding the key will make it visible to anyone who can view your site source.
 
 ## 2) Run the project locally (recommended)
 
