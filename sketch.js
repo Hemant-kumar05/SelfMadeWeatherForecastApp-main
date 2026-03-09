@@ -8,6 +8,21 @@ let weatherInfo = document.querySelector('.weatherImg')
 
 const OPENWEATHER_API_KEY = 'YOUR_OPENWEATHER_API_KEY_HERE';
 
+let apiKeyWarningShown = false;
+
+function ensureApiKeyConfigured() {
+    if (OPENWEATHER_API_KEY && OPENWEATHER_API_KEY !== 'YOUR_OPENWEATHER_API_KEY_HERE') {
+        return true;
+    }
+
+    if (!apiKeyWarningShown) {
+        apiKeyWarningShown = true;
+        alert('Please set your OpenWeather API key in sketch.js (OPENWEATHER_API_KEY).');
+    }
+
+    return false;
+}
+
 btn.addEventListener('click', getInfo);
 
 document.addEventListener('keydown', (event) => {
@@ -17,6 +32,10 @@ document.addEventListener('keydown', (event) => {
 });
 
 async function getInfo() {
+
+    if (!ensureApiKeyConfigured()) {
+        return;
+    }
 
     if (input.value.length > 0) {
 
@@ -54,6 +73,10 @@ async function getInfo() {
 }
 
 onload = async () => {
+    if (!ensureApiKeyConfigured()) {
+        return;
+    }
+
     let city = 'new delhi';
     input.value = '';
 

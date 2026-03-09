@@ -1,52 +1,83 @@
 # Weather Forecast App
 
-A simple weather app that fetches current weather by **city name** using the **OpenWeather** API.
+A lightweight weather app that fetches **current weather by city name** using the **OpenWeather** API.
 
-## Run the project (recommended)
+## Features
 
-This is a static HTML/CSS/JS project, so you should run it with a small local web server (recommended over opening the file directly).
+- Search weather by city name
+- Shows temperature (°C), humidity, and wind speed
+- Updates weather icon based on conditions
 
-## Set your OpenWeather API key
+## Tech
 
-1. Create a free API key at https://openweathermap.org/api
-2. Open `sketch.js` and set:
+- HTML + CSS + JavaScript (no build step)
+- OpenWeather Current Weather API
+
+## Prerequisites
+
+- A modern web browser
+- (Recommended) Python 3.x to run a local server OR the VS Code Live Server extension
+- An OpenWeather API key
+
+## 1) Set your OpenWeather API key
+
+This project calls OpenWeather directly from the browser, so you must provide an API key.
+
+1. Create a free API key: https://openweathermap.org/api
+2. Open `sketch.js`
+3. Replace the placeholder value:
 
    ```js
    const OPENWEATHER_API_KEY = 'YOUR_OPENWEATHER_API_KEY_HERE';
    ```
 
+## 2) Run the project locally (recommended)
+
+Because this is a static site, the best way to run it is with a small local web server (recommended over opening the file with `file://`).
+
 ### Option A: Python (quickest)
 
-1. Open a terminal in this project folder.
-2. Run:
+1. Open a terminal in the project folder.
+2. Start a server:
 
-   - **Windows (PowerShell or CMD):**
+   ```bash
+   python -m http.server 8000
+   ```
 
-     ```bash
-     python -m http.server 8000
-     ```
+3. Open the app:
 
-3. Open in your browser:
-
-   - http://localhost:8000/
+   http://localhost:8000/
 
 ### Option B: VS Code Live Server
 
-1. Install the **Live Server** extension.
-2. Right-click `index.html` and choose **Open with Live Server**.
+1. Install the **Live Server** extension in VS Code.
+2. Right-click `index.html` → **Open with Live Server**.
 
-## Notes / Troubleshooting
+## Deploy (GitHub Pages)
 
-- If you open `index.html` with a `file://` URL, some browsers may block network requests or behave inconsistently. Use a local server instead.
-- This project calls OpenWeather from the browser, so it needs a working API key.
-   - The key is configured in `sketch.js` via `OPENWEATHER_API_KEY`.
-   - If you see errors like `401` (Unauthorized) or `Invalid API key`, replace the `appid=...` value with your own OpenWeather API key.
+You can host this as a static site using GitHub Pages.
 
-## Project files
+1. Push the repository to GitHub.
+2. In GitHub repo settings: **Settings → Pages**
+3. Select:
+   - Source: `Deploy from a branch`
+   - Branch: `main`
+   - Folder: `/ (root)`
 
-- `index.html` - UI markup
-- `style.css` - styles
-- `sketch.js` - app logic + OpenWeather fetch
-- `assets/` - icons/images
+After that, GitHub will provide the public URL.
+
+## Troubleshooting
+
+- **Nothing happens / fetch fails**: make sure your API key is set in `sketch.js`.
+- **401 Unauthorized / Invalid API key**: your key is wrong, inactive, or not yet activated by OpenWeather.
+- **404 Invalid City Name**: check spelling (try a well-known city like `Delhi`, `London`, `Tokyo`).
+- **Icons not showing**: verify the corresponding file exists in the `assets/` folder.
+
+## Project structure
+
+- `index.html` — UI markup
+- `style.css` — styles
+- `sketch.js` — app logic + API calls
+- `assets/` — images/icons
 
 
