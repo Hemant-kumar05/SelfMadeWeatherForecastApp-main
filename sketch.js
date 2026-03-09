@@ -6,21 +6,27 @@ let windMeasure = document.querySelector('.windInfo');
 let humidMeasure = document.querySelector('.humidityInfo');
 let weatherInfo = document.querySelector('.weatherImg')
 
-const OPENWEATHER_API_KEY = 'YOUR_OPENWEATHER_API_KEY_HERE';
+// Don't commit secrets to GitHub.
+// For local use you can set a key here, otherwise the app will prompt once and store it in the browser.
+const OPENWEATHER_API_KEY = '';
 
-let apiKeyWarningShown = false;
+function getApiKey() {
+    if (OPENWEATHER_API_KEY) return OPENWEATHER_API_KEY;
 
-function ensureApiKeyConfigured() {
-    if (OPENWEATHER_API_KEY && OPENWEATHER_API_KEY !== 'YOUR_OPENWEATHER_API_KEY_HERE') {
-        return true;
+    let storedKey = localStorage.getItem('OPENWEATHER_API_KEY');
+    if (storedKey) return storedKey;
+
+    let enteredKey = prompt('Enter your OpenWeather API key (it will be saved in this browser):');
+    if (enteredKey) {
+        enteredKey = enteredKey.trim();
+        if (enteredKey) {
+            localStorage.setItem('OPENWEATHER_API_KEY', enteredKey);
+            return enteredKey;
+        }
     }
 
-    if (!apiKeyWarningShown) {
-        apiKeyWarningShown = true;
-        alert('Please set your OpenWeather API key in sketch.js (OPENWEATHER_API_KEY).');
-    }
-
-    return false;
+    alert('OpenWeather API key is required. Please refresh and enter your key.');
+    return '';
 }
 
 btn.addEventListener('click', getInfo);
@@ -33,16 +39,15 @@ document.addEventListener('keydown', (event) => {
 
 async function getInfo() {
 
-    if (!ensureApiKeyConfigured()) {
-        return;
-    }
+    const apiKey = getApiKey();
+    if (!apiKey) return;
 
     if (input.value.length > 0) {
 
         let city = input.value.toLowerCase().trim();
         input.value = '';
 
-			let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPENWEATHER_API_KEY}&units=metric`;
+			let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
             let res = await fetch(url)
             let data = await res.json();
 
@@ -73,14 +78,13 @@ async function getInfo() {
 }
 
 onload = async () => {
-    if (!ensureApiKeyConfigured()) {
-        return;
-    }
+    const apiKey = getApiKey();
+    if (!apiKey) return;
 
     let city = 'new delhi';
     input.value = '';
 
-    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${OPENWEATHER_API_KEY}&units=metric`;
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
     let res = await fetch(url)
     let data = await res.json();
 
